@@ -8,7 +8,7 @@ Abra [shrekSendScript.js](https://github.com/Matt-Fontes/SendScriptWhatsApp/blob
 
 Copie todo o conteúdo (clique em raw -> ctrl+a -> ctrl+c)
 
-No WhatsAppWeb abra o console do Browser
+No WhatsApp Web abra o console do Browser
 
 Cole o código no console e aperte Enter
 
