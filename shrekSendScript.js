@@ -27,7 +27,7 @@ function enviarScript(scriptText){
                 if (i < lines.length) {           
                     myLoop();             
                 }                       
-            }, 100)
+            }, 250)
         }
 
         myLoop(); 
