@@ -4,26 +4,26 @@ function enviarScript(scriptText){
     let i = 0;       
 
     setInterval(() => { 
-        if(i > lines.length) return
+        if(i >= lines.length) return
 
+        if(lines[i].trim() != ''){ 
+            console.log(lines[i]); 
+    
+            window.InputEvent = window.Event || window.InputEvent;
+    
+            const event = new InputEvent('input', { bubbles: true });
+    
+            const textbox = document.querySelector('div._1awRl[data-tab="6"]');
+    
+            textbox.textContent = lines[i];
+    
+            textbox.dispatchEvent(event);
+    
+            document.querySelector("button._2Ujuu").click();                   
+
+        }
         i++;
-
-        if(lines[i].trim() == '') return
-
-        console.log(lines[i]); 
-
-        window.InputEvent = window.Event || window.InputEvent;
-
-        const event = new InputEvent('input', { bubbles: true });
-
-        const textbox = document.querySelector('div._1awRl[data-tab="6"]');
-
-        textbox.textContent = lines[i];
-
-        textbox.dispatchEvent(event);
-
-        document.querySelector("button._2Ujuu").click();                   
-    }, 250)
+    }, 2500)
 }
 
 enviarScript(`SHREK
