@@ -1,39 +1,32 @@
 function enviarScript(scriptText){
-        var allText = scriptText;
-        lines = allText.split("\n"); 
+    const lines = scriptText.split("\n"); 
 
-        var i = 0;                  
-        function myLoop() {         
-            setTimeout(function() {   
-                if(lines[i].trim() != ""){
-                    console.log(lines[i]); 
+    let i = 0;       
 
-                    window.InputEvent = window.Event || window.InputEvent;
+    setInterval(() => { 
+        if(i > lines.length) return
 
-                    var event = new InputEvent('input', {
-                        bubbles: true
-                    });
+        i++;
 
-                    var textbox = document.querySelector('div._1awRl[data-tab="6"]');
+        if(lines[i].trim() == '') return
 
-                    textbox.textContent = lines[i];
+        console.log(lines[i]); 
 
-                    textbox.dispatchEvent(event);
+        window.InputEvent = window.Event || window.InputEvent;
 
-                    document.querySelector("button._2Ujuu").click();
+        const event = new InputEvent('input', { bubbles: true });
 
-                }
-                i++;                    
-                if (i < lines.length) {           
-                    myLoop();             
-                }                       
-            }, 250)
-        }
+        const textbox = document.querySelector('div._1awRl[data-tab="6"]');
 
-        myLoop(); 
-    }
+        textbox.textContent = lines[i];
 
-    enviarScript(`SHREK
+        textbox.dispatchEvent(event);
+
+        document.querySelector("button._2Ujuu").click();                   
+    }, 250)
+}
+
+enviarScript(`SHREK
 
 Written by
 
