@@ -23,7 +23,7 @@ function enviarScript(scriptText){
 
         }
         i++;
-    }, 2500)
+    }, 250)
 }
 
 enviarScript(`SHREK
