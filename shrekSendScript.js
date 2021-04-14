@@ -19,7 +19,7 @@ function enviarScript(scriptText){
     
             textbox.dispatchEvent(event);
     
-            document.querySelector("button._2Ujuu").click();                   
+            document.querySelector("button._1E0Oz").click();                   
 
         }
         i++;
