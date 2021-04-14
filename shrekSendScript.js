@@ -13,7 +13,7 @@ function enviarScript(scriptText){
     
             const event = new InputEvent('input', { bubbles: true });
     
-            const textbox = document.querySelector('div._1awRl[data-tab="6"]');
+            const textbox = document.querySelector('div._2_1wd[data-tab="6"]');
     
             textbox.textContent = lines[i];
     
