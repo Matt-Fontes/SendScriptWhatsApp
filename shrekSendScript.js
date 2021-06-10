@@ -1,28 +1,29 @@
-function enviarScript(scriptText){
-    const lines = scriptText.split("\n"); 
+function enviarScript(scriptText) {
+    const lines = scriptText.split("\n");
 
-    let i = 0;       
+    let index = 0;
+    const totalMessages = lines.length;
 
-    setInterval(() => { 
-        if(i >= lines.length) return
+    setInterval(() => {
+        if (index >= lines.length) return
 
-        if(lines[i].trim() != ''){ 
-            console.log(lines[i]); 
-    
+        if (lines[index].trim() != '') {
+            // Total messages - Current message | Message sent
+            console.log(`${totalMessages} - ${index + 1} | ${lines[index]}`)
+
             window.InputEvent = window.Event || window.InputEvent;
-    
-            const event = new InputEvent('input', { bubbles: true });
-    
-            const textbox = document.querySelector('div._2_1wd[data-tab="6"]');
-    
-            textbox.textContent = lines[i];
-    
-            textbox.dispatchEvent(event);
-    
-            document.querySelector("button._1E0Oz").click();                   
 
+            const event = new InputEvent('input', { bubbles: true });
+
+            const textbox = document.querySelector('div._2_1wd[data-tab="6"]');
+
+            textbox.textContent = lines[index];
+
+            textbox.dispatchEvent(event);
+
+            document.querySelector("button._1E0Oz").click();
         }
-        i++;
+        index++;
     }, 250)
 }
 
@@ -3702,6 +3703,4 @@ DONKEY
 black) Oh, that's funny. Oh. Oh. I can't 
 breathe. I can't breathe.
 
-THE END
-
-`);
+THE END`);
