@@ -15,3 +15,23 @@ No WhatsApp Web abra o console do Browser
 Cole o código no console e aperte Enter
 
 Pronto
+
+## Plugin
+
+A extensão habilita um novo botão no seu whats web o abrir o chat que deseja enviar e clicar.
+
+![imagem plugin no whats](./extesion/imagem/print_whatsapp.png)
+
+Para ultilizar a extensão siga os seguintes passos:
+
+1. Faça download do projeto em zip e descompacte.
+
+![Download](./extesion/imagem/download.png)
+
+2. Acesse no seu navegador Chrome o endereço: [chrome://extensions/](chrome://extensions/) e marque a caixa do **Modo desenvolvedor** no canto superior direito.
+
+3. *Click* em **Carregar sem compactação** e selecione a pasta descompactada da sua extensão para instalá-la.
+
+![Carregar sem compactação](./extesion/imagem/csc.png)
+
+Pronto. Divirta-se 
