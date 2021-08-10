@@ -20,13 +20,13 @@ Pronto
 
 A extensão habilita um novo botão no seu whats web o abrir o chat que deseja enviar e clicar.
 
-![imagem plugin no whats](./extesion/imagem/print_whatsapp.png)
+![imagem plugin no whats](./blob/extensao/extension/imagem/print_whatsapp.png)
 
 Para ultilizar a extensão siga os seguintes passos:
 
 1. Faça download do projeto em zip e descompacte.
 
-![Download](./extesion/imagem/download.png)
+![Download](./extensao/extension/imagem/download.png)
 
 2. Acesse no seu navegador Chrome o endereço: [chrome://extensions/](chrome://extensions/) e marque a caixa do **Modo desenvolvedor** no canto superior direito.
 
