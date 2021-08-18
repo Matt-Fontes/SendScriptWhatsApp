@@ -1,28 +1,22 @@
-function enviarScript(scriptText) {
-	const lines = scriptText.split('\n');
+async function enviarScript(scriptText){
+    const lines = scriptText.split(/[\n\t]+/).map(line => line.trim()).filter(line => line),
+	main = document.querySelector("#main"),
+	textarea = main.querySelector(`div[contenteditable="true"]`)
 
-	let i = 0;
+	if(!textarea) throw new Error("Não há uma conversa aberta")
 
-	setInterval(() => {
-		if (i >= lines.length) return;
+	for(const line of lines){
+		console.log(line)
 
-		if (lines[i].trim() != '') {
-			console.log(lines[i]);
+		textarea.textContent = line
+		textarea.dispatchEvent(new InputEvent("input", { bubbles: true }));
 
-			window.InputEvent = window.Event || window.InputEvent;
+		(main.querySelector(`[data-testid="send"]`) || main.querySelector(`[data-icon="send"]`)).click()
+		
+		if(lines.indexOf(line) !== lines.length - 1) await new Promise(resolve => setTimeout(resolve, 250))
+	}
 
-			const event = new InputEvent('input', { bubbles: true });
-
-			const textbox = document.querySelector('div._2_1wd[data-tab="6"]');
-
-			textbox.textContent = lines[i];
-
-			textbox.dispatchEvent(event);
-
-			document.querySelector('button._1E0Oz').click();
-		}
-		i++;
-	}, 250);
+	return lines.length
 }
 
 enviarScript(`
@@ -1395,4 +1389,4 @@ I'm sorry. I'm sorry, everyone. Can we stop here?
 I'm not making a major life decision during a production number!
 All right. Take ten, everybody. Wrap it up, guys.
 I had virtually no rehearsal for that.
-`);
+`).then(e => console.log(`Código finalizado, ${e} mensagens enviadas`)).catch(console.error)

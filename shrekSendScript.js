@@ -1,32 +1,26 @@
-function enviarScript(scriptText){
-    const lines = scriptText.split("\n"); 
+async function enviarScript(scriptText){
+    const lines = scriptText.split(/[\n\t]+/).map(line => line.trim()).filter(line => line),
+	main = document.querySelector("#main"),
+	textarea = main.querySelector(`div[contenteditable="true"]`)
 
-    let i = 0;       
+	if(!textarea) throw new Error("Não há uma conversa aberta")
 
-    setInterval(() => { 
-        if(i >= lines.length) return
+	for(const line of lines){
+		console.log(line)
 
-        if(lines[i].trim() != ''){ 
-            console.log(lines[i]); 
-    
-            window.InputEvent = window.Event || window.InputEvent;
-    
-            const event = new InputEvent('input', { bubbles: true });
-    
-            const textbox = document.querySelector('#main div._13NKt');
-    
-            textbox.textContent = lines[i];
-    
-            textbox.dispatchEvent(event);
-    
-            document.querySelector("#main span[data-testid=send]").click();                   
+		textarea.textContent = line
+		textarea.dispatchEvent(new InputEvent("input", { bubbles: true }));
 
-        }
-        i++;
-    }, 250)
+		(main.querySelector(`[data-testid="send"]`) || main.querySelector(`[data-icon="send"]`)).click()
+		
+		if(lines.indexOf(line) !== lines.length - 1) await new Promise(resolve => setTimeout(resolve, 250))
+	}
+
+	return lines.length
 }
 
-enviarScript(`SHREK
+enviarScript(`
+SHREK
 
 Written by
 
@@ -3703,5 +3697,4 @@ black) Oh, that's funny. Oh. Oh. I can't
 breathe. I can't breathe.
 
 THE END
-
-`);
+`).then(e => console.log(`Código finalizado, ${e} mensagens enviadas`)).catch(console.error)
