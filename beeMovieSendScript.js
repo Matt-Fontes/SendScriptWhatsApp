@@ -1,32 +1,34 @@
-function enviarScript(scriptText) {
-	const lines = scriptText.split('\n');
+function  enviarScript ( scriptText ) {
+     linhas  const =  scriptText . dividir ( "\ n" ) ; 
 
-	let i = 0;
+    deixe  i  =  0 ;       
 
-	setInterval(() => {
-		if (i >= lines.length) return;
+    setInterval ( ( )  =>  { 
+        if ( i  > =  linhas . comprimento )  return
 
-		if (lines[i].trim() != '') {
-			console.log(lines[i]);
+        if ( linhas [ i ] . trim ( )  ! =  '' ) { 
+            console . log ( linhas [ i ] ) ; 
+    
+            janela . InputEvent  =  janela . Evento  ||  janela . InputEvent ;
+    
+            const  event  =  new  InputEvent ( 'input' ,  {  bubbles : true  } ) ;
+    
+            const  textbox  =  document . querySelector ( '#main div._13NKt' ) ;
+    
+            caixa de texto . textContent  =  linhas [ i ] ;
+    
+            caixa de texto . dispatchEvent ( evento ) ;
+    
+            documento . querySelector ( "#main span [data-testid = send]" ) . clique ( ) ;                   
 
-			window.InputEvent = window.Event || window.InputEvent;
-
-			const event = new InputEvent('input', { bubbles: true });
-
-			const textbox = document.querySelector('div._2_1wd[data-tab="6"]');
-
-			textbox.textContent = lines[i];
-
-			textbox.dispatchEvent(event);
-
-			document.querySelector('button._1E0Oz').click();
-		}
-		i++;
-	}, 250);
+        }
+        i ++ ;
+    } ,  250 )
 }
 
-enviarScript(`
-BEE Movie
+enviarScript ( `bee movie
+
+
 
 Written by Jerry Seinfeld & Andy Robin & Barry Marder & Spike Feresten
 
