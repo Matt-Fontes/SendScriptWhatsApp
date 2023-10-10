@@ -5,8 +5,8 @@ async function enviarScript(scriptText){
 	
 	if(!textarea) throw new Error("Não há uma conversa aberta")
 	
-	for(const line of lines){
-		console.log(line)
+	for(const [i,line] of lines.entries()){
+		console.log(`[Linha ${i} de ${lines.length}]`, line)
 	
 		textarea.focus();
 		document.execCommand('insertText', false, line);
