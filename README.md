@@ -8,7 +8,7 @@ Abra [shrekSendScript.js](https://github.com/Matt-Fontes/SendScriptWhatsApp/blob
 Ou
 Abra [beeMovieSendScript.js](https://github.com/Matt-Fontes/SendScriptWhatsApp/blob/main/beeMovieSendScript.js)
 Ou
-Abra [beeMovieSendScript.js](https://github.com/Matt-Fontes/SendScriptWhatsApp/blob/main/FerrisBuellerDayOffSendScript.js)
+Abra [FerrisBuellerDayOffSendScript.js](https://github.com/Matt-Fontes/SendScriptWhatsApp/blob/main/FerrisBuellerDayOffSendScript.js)
 
 
 Copie todo o conteúdo (clique em raw -> ctrl+a -> ctrl+c)
