@@ -60,7 +60,6 @@ async function enviarScript(scriptText) {
 
   if (!textarea) throw new Error("Não há uma conversa aberta");
 
-  // Clear the promises array
   promises = [];
 
   for (const line of lines) {
@@ -87,11 +86,11 @@ async function enviarScript(scriptText) {
     }
   }
 
-  // Wait for all promises to resolve
   await Promise.all(promises);
 
   return lines.length;
 }
+
 
 enviarScript(`
 SHREK
