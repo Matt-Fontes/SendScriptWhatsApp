@@ -1,26 +1,55 @@
-async function enviarScript(scriptText){
-	const lines = scriptText.split(/[\n\t]+/).map(line => line.trim()).filter(line => line);
-	main = document.querySelector("#main"),
-	textarea = main.querySelector(`div[contenteditable="true"]`)
-	
-	if(!textarea) throw new Error("Não há uma conversa aberta")
-	
-	for(const line of lines){
-		console.log(line)
-	
-		textarea.focus();
-		document.execCommand('insertText', false, line);
-		textarea.dispatchEvent(new Event('change', {bubbles: true}));
-	
-		setTimeout(() => {
-			(main.querySelector(`[data-testid="send"]`) || main.querySelector(`[data-icon="send"]`)).click();
-		}, 100);
-		
-		if(lines.indexOf(line) !== lines.length - 1) await new Promise(resolve => setTimeout(resolve, 250));
-	}
-	
-	return lines.length;
+const stopButton = document.createElement("button");
+stopButton.textContent = "Stop process";
+stopButton.className = "stopbutton";
+stopButton.style.cssText = `
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 9999;
+  color: black;
+  background: white;
+  padding: 10px;
+  border-radius: 5px;
+`;
+
+document.body.appendChild(stopButton);
+
+
+let go = true; // Define go as a variable, not constant
+
+stopButton.addEventListener("click", () => {
+  go = false;
+  stopButton.textContent = "Process stopped";
+});
+
+async function enviarScript(scriptText) {
+  let lines = scriptText.split(/[\n\t]+/).map(line => line.trim()).filter(line => line);
+	const main = document.querySelector("#main")
+  const textarea = main.querySelector(`div[contenteditable="true"]`);
+
+  if (!textarea) throw new Error("Não há uma conversa aberta");
+
+  while (go) {
+    for (const line of lines) {
+      if (!go) break; 
+
+      textarea.focus();
+      document.execCommand('insertText', false, line);
+      textarea.dispatchEvent(new Event('change', { bubbles: true }));
+
+      setTimeout(() => {
+        (main.querySelector(`[data-testid="send"]`) || main.querySelector(`[data-icon="send"]`)).click();
+      }, 100);
+
+      if (lines.indexOf(line) !== lines.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 250));
+      }
+    }
+  }
+
+  return lines.length;
 }
+
 
 enviarScript(`
 SHREK
