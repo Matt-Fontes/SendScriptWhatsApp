@@ -3,7 +3,7 @@
     "version": "0.0.1",
     "description": "Send scripts of movies in whatsapp",
     "manifest_version": 3,
-    "author": "Renan Rangel",
+    "author": "Renan Rangel, Matt-Fontes",
     "action":{
         "default_popup": "popup.html",
         "default_title": "Send Scripts"
