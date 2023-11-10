@@ -1,0 +1,21 @@
+{
+    "name": "Send scripts in whatsapp",
+    "version": "0.0.1",
+    "description": "Send scripts of movies in whatsapp",
+    "manifest_version": 3,
+    "author": "Renan Rangel",
+    "action":{
+        "default_popup": "popup.html",
+        "default_title": "Send Scripts"
+    },
+    "permissions": [
+        "storage",
+        "tabs",
+        "activeTab",
+        "scripting"
+    ],
+    "content_scripts": [{
+        "js": ["./scripts/contentScript.js"],
+        "matches": ["*://*/*"]
+    }]
+}
