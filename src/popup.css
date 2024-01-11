@@ -1,0 +1,12 @@
+body {
+    min-width: 496px;
+    padding: 16px;
+}
+
+div#conainer {
+    background-color: black;
+}
+
+.film-label {
+    display: block;
+}

@@ -1,28 +1,4 @@
-async function enviarScript(scriptText){
-	const lines = scriptText.split(/[\n\t]+/).map(line => line.trim()).filter(line => line);
-	main = document.querySelector("#main"),
-	textarea = main.querySelector(`div[contenteditable="true"]`)
-	
-	if(!textarea) throw new Error("Não há uma conversa aberta")
-	
-	for(const line of lines){
-		console.log(line)
-	
-		textarea.focus();
-		document.execCommand('insertText', false, line);
-		textarea.dispatchEvent(new Event('change', {bubbles: true}));
-	
-		setTimeout(() => {
-			(main.querySelector(`[data-testid="send"]`) || main.querySelector(`[data-icon="send"]`)).click();
-		}, 100);
-		
-		if(lines.indexOf(line) !== lines.length - 1) await new Promise(resolve => setTimeout(resolve, 250));
-	}
-	
-	return lines.length;
-}
-
-enviarScript(`
+export const script = `
 BEE Movie
 
 Written by Jerry Seinfeld & Andy Robin & Barry Marder & Spike Feresten
@@ -1392,4 +1368,4 @@ I'm sorry. I'm sorry, everyone. Can we stop here?
 I'm not making a major life decision during a production number!
 All right. Take ten, everybody. Wrap it up, guys.
 I had virtually no rehearsal for that.
-`).then(e => console.log(`Código finalizado, ${e} mensagens enviadas`)).catch(console.error)
+`;
