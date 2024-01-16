@@ -1,0 +1,14 @@
+{
+  "name": "Send Message Whatsapp",
+  "version": "1.0",
+  "description": "Envia mensagem Whatsapp",
+
+  "content_scripts": [
+    {
+      "matches": ["https://web.whatsapp.com/"],
+      "css": ["style.css"],
+      "js": ["index.js", "roadmap.js", "send.js"]
+    }
+  ],
+  "manifest_version": 2
+}
