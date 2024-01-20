@@ -21,3 +21,5 @@ No WhatsApp Web abra o console do Browser
 Cole o código no console e aperte Enter
 
 Pronto
+# Poderiamos criar um para o pessoal das operadoras de internet e afins dizendo repetidamente que não queremos a super ofertas que eles estão oferecendo.
+Vou tentar adicionar isso editando o texto do be movie, utilizando substituição de palavras
