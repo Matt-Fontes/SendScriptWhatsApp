@@ -21,3 +21,28 @@ No WhatsApp Web abra o console do Browser
 Cole o código no console e aperte Enter
 
 Pronto
+
+---
+
+# SendScriptWhatsApp
+
+Code to send the entire script of Shrek or Bee Movie to your friends or WhatsApp groups.
+
+## Usage
+
+Open [shrekSendScript.js](https://github.com/Matt-Fontes/SendScriptWhatsApp/blob/main/shrekSendScript.js)
+Or
+Open [beeMovieSendScript.js](https://github.com/Matt-Fontes/SendScriptWhatsApp/blob/main/beeMovieSendScript.js)
+
+Copy the entire content (click on raw -> ctrl+a -> ctrl+c)
+
+In WhatsApp Web, open the Browser console
+
+| ⚠️ Important Notice, in a recent update of Google Chrome, any script being pasted into the Console is being prevented.|
+|--|
+| ***To workaround this issue, the developer console expects to receive a textual confirmation by writing in the console: "allow-scripts"***|
+|After that, pasting and continuing the script execution will be allowed|
+
+Paste the code into the console and press Enter
+
+Ready
