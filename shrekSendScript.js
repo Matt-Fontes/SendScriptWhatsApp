@@ -1,27 +1,71 @@
-async function enviarScript(scriptText){
-	const lines = scriptText.split(/[\n\t]+/).map(line => line.trim()).filter(line => line);
-	main = document.querySelector("#main"),
-	textarea = main.querySelector(`div[contenteditable="true"]`)
-	
-	if(!textarea) throw new Error("Não há uma conversa aberta")
-	
-	for(const line of lines){
-		console.log(line)
-	
-		textarea.focus();
-		document.execCommand('insertText', false, line);
-		textarea.dispatchEvent(new Event('change', {bubbles: true}));
-	
-		setTimeout(() => {
-			(main.querySelector(`[data-testid="send"]`) || main.querySelector(`[data-icon="send"]`)).click();
-		}, 100);
-		
-		if(lines.indexOf(line) !== lines.length - 1) await new Promise(resolve => setTimeout(resolve, 250));
-	}
-	
-	return lines.length;
+async function enviarScript(scriptText) {
+    const lines = scriptText.split(/[\n\t]+/).map(line => line.trim()).filter(line => line);
+    const main = document.querySelector("#main"); // Adicionado 'const'
+
+    if (!main) {
+        throw new Error("Elemento principal #main não encontrado. Verifique se a página do WhatsApp Web está carregada corretamente e se há uma conversa selecionada.");
+    }
+
+    const textarea = main.querySelector(`div[contenteditable="true"]`);
+
+    if (!textarea) {
+        throw new Error("Não há uma conversa aberta ou o campo de texto (textarea) não foi encontrado dentro de #main.");
+    }
+
+    for (const line of lines) {
+        console.log(line);
+
+        textarea.focus();
+        document.execCommand('insertText', false, line);
+        textarea.dispatchEvent(new Event('change', { bubbles: true }));
+
+        // Pequena espera para a interface processar a entrada
+        await new Promise(resolve => setTimeout(resolve, 150)); // Aumentei um pouco
+
+        let sendButton = null;
+        // **IMPORTANTE: INSPECIONE O BOTÃO DE ENVIO NO WHATSAPP WEB PARA OBTER OS SELETORES CORRETOS!**
+        // Abaixo estão exemplos, você precisará verificar e ajustá-los.
+        const possibleSendButtonSelectors = [
+            'button[data-testid="send"]',         // Seletor comum
+            'span[data-testid="send"]',           // Às vezes o testid está no span
+            'button[data-icon="send"]',           // Outro seletor comum
+            'span[data-icon="send"]',             // Ícone dentro de um span clicável
+            'button[aria-label="Enviar"]',        // Por acessibilidade (Português)
+            'button[aria-label="Send"]',          // Por acessibilidade (Inglês)
+            'button[aria-label*="Enviar"]',       // Contém "Enviar"
+            'button[aria-label*="Send"]',         // Contém "Send"
+            // Exemplo com uma classe específica que você pode encontrar (use com cautela, classes podem mudar):
+            // 'button._ajv4' (esta classe é apenas um exemplo e provavelmente mudará)
+            // Adicione outros seletores que você identificar aqui:
+            // 'seu-seletor-personalizado'
+        ];
+
+        for (const selector of possibleSendButtonSelectors) {
+            sendButton = main.querySelector(selector);
+            if (sendButton) {
+                console.log(`Botão de envio encontrado com o seletor: ${selector}`);
+                break; // Encontrou o botão, sai do loop
+            }
+        }
+        
+        if (sendButton) {
+            sendButton.click();
+        } else {
+            console.error("ERRO: Botão de envio não encontrado com nenhum dos seletores tentados. Por favor, inspecione o elemento na página e atualize os seletores no script.");
+            // Você pode optar por parar o script aqui se o botão não for encontrado:
+            // throw new Error("Botão de envio não encontrado. Verifique os seletores.");
+        }
+
+        // Intervalo entre o envio de cada linha
+        if (lines.indexOf(line) !== lines.length - 1) {
+            await new Promise(resolve => setTimeout(resolve, 300)); // Aumentei um pouco para dar mais tempo entre as mensagens
+        }
+    }
+
+    return lines.length;
 }
 
+// Exemplo de como usar:
 enviarScript(`
 SHREK
 
@@ -3680,8 +3724,8 @@ Shrek and Fiona kiss...and the kiss fades into...
 
 THE SWAMP
 
-...their wedding kiss. Shrek and Fiona are now married. 'I'm 
-a Believer' by Smashmouth is played in the background. Shrek 
+...their wedding kiss. Shrek and Fiona are now married. 
+'I'm a Believer' by Smashmouth is played in the background. Shrek 
 and Fiona break apart and run through the crowd to their awaiting 
 carriage. Which is made of a giant onion. Fiona tosses her bouquet 
 which both Cinderella and Snow White try to catch. But they end 
@@ -3700,4 +3744,6 @@ black) Oh, that's funny. Oh. Oh. I can't
 breathe. I can't breathe.
 
 THE END
-`).then(e => console.log(`Código finalizado, ${e} mensagens enviadas`)).catch(console.error)
+`)
+.then(e => console.log(`Código finalizado, ${e} mensagens enviadas.`))
+.catch(console.error);
