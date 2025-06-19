@@ -1,28 +1,46 @@
-async function enviarScript(scriptText){
-	const lines = scriptText.split(/[\n\t]+/).map(line => line.trim()).filter(line => line);
-	main = document.querySelector("#main"),
-	textarea = main.querySelector(`div[contenteditable="true"]`)
-	
-	if(!textarea) throw new Error("Não há uma conversa aberta")
-	
-	for(const line of lines){
-		console.log(line)
-	
+async function sendMessages(scriptText) {
+	const lines = scriptText
+		.split(/[\n\t]+/)
+		.map(line => line.trim())
+		.filter(line => line);
+
+	const main = document.querySelector("#main");
+	if (!main) throw new Error("Main conversation element not found");
+
+	const textarea = main.querySelector(`div[contenteditable="true"]`);
+	if (!textarea) throw new Error("No open conversation found");
+
+	for (const line of lines) {
+		console.log("Sending:", line);
+
 		textarea.focus();
+		document.execCommand('selectAll', false, null);
+		document.execCommand('delete', false, null);
 		document.execCommand('insertText', false, line);
-		textarea.dispatchEvent(new Event('change', {bubbles: true}));
-	
-		setTimeout(() => {
-			(main.querySelector(`[data-testid="send"]`) || main.querySelector(`[data-icon="send"]`)).click();
-		}, 100);
-		
-		if(lines.indexOf(line) !== lines.length - 1) await new Promise(resolve => setTimeout(resolve, 250));
+		textarea.dispatchEvent(new Event('input', { bubbles: true }));
+
+		// Wait for send button to be ready
+		await new Promise(resolve => setTimeout(resolve, 300));
+
+		const sendButton =
+			main.querySelector('button[aria-label="Send"]') ||
+			main.querySelector('span[data-icon="wds-ic-send-filled"]')?.closest("button");
+
+		if (!sendButton) {
+			console.warn("⚠️ Send button not found. Skipping this line.");
+			continue;
+		}
+
+		sendButton.click();
+
+		// Wait 100ms between messages
+		if (lines.indexOf(line) !== lines.length - 1)
+			await new Promise(resolve => setTimeout(resolve, 100));
 	}
-	
+
 	return lines.length;
 }
-
-enviarScript(`
+sendMessages(`
 SHREK
 
 Written by
