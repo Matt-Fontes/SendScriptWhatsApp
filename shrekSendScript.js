@@ -1,22 +1,24 @@
 async function enviarScript(scriptText){
 	const lines = scriptText.split(/[\n\t]+/).map(line => line.trim()).filter(line => line);
-	main = document.querySelector("#main"),
-	textarea = main.querySelector(`div[contenteditable="true"]`)
+	const main = document.querySelector("#main"),
+	      textarea = main.querySelector(`div[contenteditable="true"]`);
 	
-	if(!textarea) throw new Error("Não há uma conversa aberta")
+	if (!textarea) throw new Error("Não há uma conversa aberta");
 	
-	for(const line of lines){
-		console.log(line)
-	
+	for (const line of lines) {
+		console.log(line);
 		textarea.focus();
 		document.execCommand('insertText', false, line);
-		textarea.dispatchEvent(new Event('change', {bubbles: true}));
-	
+		textarea.dispatchEvent(new Event('input', { bubbles: true }));
+
 		setTimeout(() => {
-			(main.querySelector(`[data-testid="send"]`) || main.querySelector(`[data-icon="send"]`)).click();
+			const botaoEnviar = main.querySelector('button[aria-label="Enviar"]') || 
+			                    main.querySelector('span[data-icon="wds-ic-send-filled"]')?.closest("button");
+			botaoEnviar.click();
 		}, 100);
-		
-		if(lines.indexOf(line) !== lines.length - 1) await new Promise(resolve => setTimeout(resolve, 250));
+
+		if (lines.indexOf(line) !== lines.length - 1)
+			await new Promise(resolve => setTimeout(resolve, 250));
 	}
 	
 	return lines.length;
@@ -3700,4 +3702,4 @@ black) Oh, that's funny. Oh. Oh. I can't
 breathe. I can't breathe.
 
 THE END
-`).then(e => console.log(`Código finalizado, ${e} mensagens enviadas`)).catch(console.error)
+`).then(e => console.log(`Código finalizado, ${e} mensagens enviadas`)).catch(console.error);
