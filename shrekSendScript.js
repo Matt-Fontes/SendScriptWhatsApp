@@ -1,3 +1,4 @@
+
 async function enviarScript(scriptText){
 	const lines = scriptText.split(/[\n\t]+/).map(line => line.trim()).filter(line => line);
 	main = document.querySelector("#main"),
