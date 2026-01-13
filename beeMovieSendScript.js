@@ -1,24 +1,43 @@
-async function enviarScript(scriptText){
-	const lines = scriptText.split(/[\n\t]+/).map(line => line.trim()).filter(line => line);
-	main = document.querySelector("#main"),
-	textarea = main.querySelector(`div[contenteditable="true"]`)
-	
-	if(!textarea) throw new Error("Não há uma conversa aberta")
-	
-	for(const line of lines){
-		console.log(line)
-	
+async function enviarScript(scriptText) {
+	const lines = scriptText
+		.split(/[\n\t]+/)
+		.map(l => l.trim())
+		.filter(Boolean);
+	// This changed to new msg button in whatsapp, resolve for "Chat is not openning/Conversa não aberta"
+	const textarea = document.querySelector('footer div[contenteditable="true"]');
+
+	if (!textarea) throw new Error("Não há uma conversa aberta");
+
+	for (let i = 0; i < lines.length; i++) {
+		const line = lines[i];
+		console.log(line);
+
 		textarea.focus();
 		document.execCommand('insertText', false, line);
-		textarea.dispatchEvent(new Event('change', {bubbles: true}));
-	
-		setTimeout(() => {
-			(main.querySelector(`[data-testid="send"]`) || main.querySelector(`[data-icon="send"]`)).click();
-		}, 100);
-		
-		if(lines.indexOf(line) !== lines.length - 1) await new Promise(resolve => setTimeout(resolve, 250));
+		textarea.dispatchEvent(new Event('input', { bubbles: true }));
+
+		await new Promise(resolve => setTimeout(resolve, 200));
+
+		// Button search based on DOCUMENT not on MAIN, in the new query ARIAL-LABEL
+		const botao = document.querySelector('[aria-label="Enviar"]')
+
+		// this if prevents giving null
+		if (!botao) {
+			console.warn("Botão Enviar não encontrado");
+			return;
+		}
+
+		botao.click();
+
+		if (i !== lines.length - 1) {
+			await new Promise(resolve => setTimeout(resolve, 300));
+		}
 	}
-	
+
+	// Se concientize, caso aconteça algo, é por sua conta em risco
+	// E fica tranquilo, isso é so um arquivo de envio, não tem websocket, grapper nem nada, conferido por outros devs
+	console.warn('ISTO É APENAS UM AVISO! SEU CODIGO FOI ENVIADO COM SUCESSO E NÃO RETORNO FALHA ALGUMA! CONFIRA A CONVERSA DO WHATSAPP PARA GARANTIR QUE TUDO FOI ENVIADO! BUGS, LAGS, TRAVAMENTOS NO PROPRIO DISPOSITIVO É POR SUA PROPRIA RESPONSABILIDADE E RISCO.')
+
 	return lines.length;
 }
 
