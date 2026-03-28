@@ -1,25 +1,99 @@
-async function enviarScript(scriptText){
-	const lines = scriptText.split(/[\n\t]+/).map(line => line.trim()).filter(line => line);
-	main = document.querySelector("#main"),
-	textarea = main.querySelector(`div[contenteditable="true"]`)
-	
-	if(!textarea) throw new Error("Não há uma conversa aberta")
-	
-	for(const line of lines){
-		console.log(line)
-	
-		textarea.focus();
-		document.execCommand('insertText', false, line);
-		textarea.dispatchEvent(new Event('change', {bubbles: true}));
-	
-		setTimeout(() => {
-			(main.querySelector(`[data-testid="send"]`) || main.querySelector(`[data-icon="send"]`)).click();
-		}, 100);
-		
-		if(lines.indexOf(line) !== lines.length - 1) await new Promise(resolve => setTimeout(resolve, 250));
-	}
-	
-	return lines.length;
+async function esperarElemento(seletor, raiz = document, timeout = 10000) {
+  const inicio = Date.now();
+
+  while (Date.now() - inicio < timeout) {
+    const elemento = raiz.querySelector(seletor);
+    if (elemento) return elemento;
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+
+  throw new Error(`Elemento não encontrado: ${seletor}`);
+}
+
+async function esperarCondicao(callback, timeout = 10000, intervalo = 100) {
+  const inicio = Date.now();
+
+  while (Date.now() - inicio < timeout) {
+    const resultado = callback();
+    if (resultado) return resultado;
+    await new Promise(resolve => setTimeout(resolve, intervalo));
+  }
+
+  throw new Error("A condição esperada não foi atendida no tempo limite.");
+}
+
+function obterTextoAtual(elemento) {
+  return (elemento.innerText || elemento.textContent || "").trim();
+}
+
+function encontrarBotaoEnviar(main) {
+  return (
+    main.querySelector('[data-testid="send"]') ||
+    main.querySelector('[data-icon="send"]') ||
+    Array.from(main.querySelectorAll('button, div[role="button"], span[aria-label], span[data-icon]'))
+      .find(el => {
+        const aria = (el.getAttribute("aria-label") || "").toLowerCase();
+        const testid = (el.getAttribute("data-testid") || "").toLowerCase();
+        const icon = (el.getAttribute("data-icon") || "").toLowerCase();
+
+        return (
+          aria.includes("send") ||
+          aria.includes("enviar") ||
+          testid.includes("send") ||
+          icon === "send"
+        );
+      })
+  );
+}
+
+function limparCampo(textarea) {
+  textarea.focus();
+
+  document.execCommand("selectAll", false, null);
+  document.execCommand("delete", false, null);
+}
+
+function inserirTexto(textarea, texto) {
+  textarea.focus();
+  document.execCommand("insertText", false, texto);
+}
+
+async function enviarLinha(main, textarea, linha) {
+  limparCampo(textarea);
+  inserirTexto(textarea, linha);
+
+  await esperarCondicao(() => obterTextoAtual(textarea).length > 0, 3000);
+
+  const botaoEnviar = await esperarCondicao(() => encontrarBotaoEnviar(main), 5000);
+
+  botaoEnviar.click();
+
+  await esperarCondicao(() => obterTextoAtual(textarea) === "", 5000);
+}
+
+async function enviarScript(scriptText) {
+  const lines = scriptText
+    .split(/\r?\n/)
+    .map(line => line.trim())
+    .filter(Boolean);
+
+  const main = await esperarElemento("#main");
+  const textarea = await esperarElemento('div[contenteditable="true"]', main);
+
+  if (!textarea) {
+    throw new Error("Não há uma conversa aberta.");
+  }
+
+  for (const [index, line] of lines.entries()) {
+    console.log(`Enviando ${index + 1}/${lines.length}: ${line}`);
+    await enviarLinha(main, textarea, line);
+
+    if (index !== lines.length - 1) {
+      await new Promise(resolve => setTimeout(resolve, 350));
+    }
+  }
+
+  return `${lines.length} mensagens enviadas com sucesso.`;
 }
 
 enviarScript(`
