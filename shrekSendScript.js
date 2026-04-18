@@ -12,9 +12,13 @@ async function enviarScript(scriptText){
 		document.execCommand('insertText', false, line);
 		textarea.dispatchEvent(new Event('change', {bubbles: true}));
 	
-		setTimeout(() => {
-			(main.querySelector(`[data-testid="send"]`) || main.querySelector(`[data-icon="send"]`)).click();
-		}, 100);
+		await new Promise(resolve => setTimeout(resolve, 100));
+		const sendBtn = main.querySelector(`[data-testid="send"]`)
+			|| main.querySelector(`[data-icon="send"]`)
+			|| main.querySelector(`button[aria-label="Send"]`)
+			|| main.querySelector(`span[data-icon="send"]`);
+		if(sendBtn) sendBtn.click();
+		else console.warn(`Send button not found for line: ${line}`);
 		
 		if(lines.indexOf(line) !== lines.length - 1) await new Promise(resolve => setTimeout(resolve, 250));
 	}
