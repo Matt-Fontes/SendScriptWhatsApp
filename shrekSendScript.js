@@ -1,25 +1,39 @@
 async function enviarScript(scriptText){
-	const lines = scriptText.split(/[\n\t]+/).map(line => line.trim()).filter(line => line);
-	main = document.querySelector("#main"),
-	textarea = main.querySelector(`div[contenteditable="true"]`)
-	
-	if(!textarea) throw new Error("Não há uma conversa aberta")
-	
-	for(const line of lines){
-		console.log(line)
-	
-		textarea.focus();
-		document.execCommand('insertText', false, line);
-		textarea.dispatchEvent(new Event('change', {bubbles: true}));
-	
-		setTimeout(() => {
-			(main.querySelector(`[data-testid="send"]`) || main.querySelector(`[data-icon="send"]`)).click();
-		}, 100);
-		
-		if(lines.indexOf(line) !== lines.length - 1) await new Promise(resolve => setTimeout(resolve, 250));
-	}
-	
-	return lines.length;
+    const lines = scriptText.split(/[\n\t]+/).map(line => line.trim()).filter(line => line);
+    const main = document.querySelector("#main");
+    const textarea = main ? main.querySelector(`div[contenteditable="true"]`) : null;
+    
+    if(!textarea) throw new Error("Não há uma conversa aberta! Clique em uma conversa antes de rodar o script.");
+    
+    for(const line of lines){
+        console.log("Enviando linha:", line);
+    
+        textarea.focus();
+        document.execCommand('insertText', false, line);
+        
+        textarea.dispatchEvent(new Event('input', {bubbles: true}));
+    
+        await new Promise(resolve => setTimeout(resolve, 250));
+
+        const sendBtn = main.querySelector('span[data-testid="wds-ic-send-filled"]') || 
+                        main.querySelector('span[data-icon="wds-ic-send-filled"]') || 
+                        main.querySelector('span[data-testid="send"]') || 
+                        main.querySelector('span[data-icon="send"]') ||
+                        main.querySelector('button:has(span[data-icon="send"])');
+
+        if (sendBtn) {
+            sendBtn.click();
+        } else {
+            console.error("Botão de enviar não encontrado. O seletor pode ter mudado.");
+            break;
+        }
+        
+        if(lines.indexOf(line) !== lines.length - 1) {
+            await new Promise(resolve => setTimeout(resolve, 1000)); 
+        }
+    }
+    
+    return lines.length;
 }
 
 enviarScript(`
